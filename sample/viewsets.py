@@ -7,17 +7,77 @@ from sample.serializers import *
 
 
 class CompanyViewset(ModelViewSet):
+    """
+        list:
+            Lists Companies.
+
+        create:
+            Create new Company.
+
+        retrieve:
+            retrieves company by its ID.
+
+        update:
+            updates company by its ID.
+
+        partial_update:
+            updates company by its ID.
+
+        destroy:
+            deletes company by its ID.
+
+    """
     serializer_class = CompanySerializer
     queryset = Company.objects.all()
 
 
 class SensorViewset(ModelViewSet):
+    """
+        list:
+            Lists Sensors.
+
+        create:
+            Create new Sensor.
+
+        retrieve:
+            retrieves Sensor by its ID.
+
+        update:
+            updates Sensor by its ID.
+
+        partial_update:
+            updates Sensor by its ID.
+
+        destroy:
+            deletes Sensor by its ID.
+
+    """
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
     filterset_class = SensorFilter
 
 
 class MeasurementViewset(ModelViewSet):
+    """
+        list:
+            Lists Measurements.
+
+        create:
+            Creates new Measurement.
+
+        retrieve:
+            retrieves Measurements by its ID.
+
+        update:
+            updates Measurements by its ID.
+
+        partial_update:
+            updates Measurements by its ID.
+
+        destroy:
+            deletes Measurements by its ID.
+
+    """
     serializer_class = MeasurementSerializer
     pagination_class = StandardResultsSetPagination
 
