@@ -6,7 +6,7 @@ class Company(models.Model):
     """
         Class representing a Company.
     """
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=255)
     location = models.CharField(max_length=30)
 
     class Meta:
@@ -55,4 +55,11 @@ class Measurement(models.Model):
     class Meta:
         """Meta class for Measurement."""
         db_table = 'Measurement'
+
+    def __str__(self):
+        """
+        Measurement ID and Sensor Name.
+        :return: Measurement-Sensor name
+        """
+        return "{}-{}".format(self.id, self.sensor.sensor_id)
 
