@@ -1,9 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
 
-from django_filters.rest_framework import DjangoFilterBackend
-
 from sample.models import *
 from sample.filters import *
+from sample.paginate import *
 from sample.serializers import *
 
 
@@ -20,6 +19,7 @@ class SensorViewset(ModelViewSet):
 
 class MeasurementViewset(ModelViewSet):
     serializer_class = MeasurementSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = Measurement.objects.all()
