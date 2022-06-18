@@ -23,24 +23,21 @@ from rest_framework import permissions, routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-
 router = routers.DefaultRouter()
 
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Sample API",
-      default_version='v1',
-      description="The sample application consists of three models-the Company, "
-                  "Sensor, and Measurements using DRF and Postgresql.",
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny, )
-)
+schema_view = get_schema_view(openapi.Info(
+    title="Sample API",
+    default_version='v1',
+    description="The sample application consists of three models-the Company, "
+    "Sensor, and Measurements using DRF and Postgresql.",
+),
+                              public=True,
+                              permission_classes=(permissions.AllowAny, ))
 
 urlpatterns = [
-
     path('admin/', admin.site.urls),
     path('api/', include('sample.urls')),
-
-    re_path(r'api-docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'api-docs/',
+            schema_view.with_ui('swagger', cache_timeout=0),
+            name='schema-swagger-ui'),
 ]

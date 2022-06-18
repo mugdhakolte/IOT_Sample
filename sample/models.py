@@ -26,7 +26,8 @@ class Sensor(models.Model):
         Class representing a Sensor.
     """
     sensor_id = models.CharField(primary_key=True, max_length=10)
-    company = models.ForeignKey('Company', related_name='sensors',
+    company = models.ForeignKey('Company',
+                                related_name='sensors',
                                 on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     labels = ArrayField(models.CharField(max_length=200))
@@ -47,7 +48,8 @@ class Measurement(models.Model):
     """
         Class representing a Measurement.
     """
-    sensor = models.ForeignKey('Sensor', related_name='measurements',
+    sensor = models.ForeignKey('Sensor',
+                               related_name='measurements',
                                on_delete=models.CASCADE)
     date = models.DateTimeField()
     value = models.JSONField()
@@ -62,4 +64,3 @@ class Measurement(models.Model):
         :return: Measurement-Sensor name
         """
         return "{}-{}".format(self.id, self.sensor.sensor_id)
-

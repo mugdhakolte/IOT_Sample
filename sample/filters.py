@@ -9,4 +9,3 @@ class SensorFilter(django_filters.FilterSet):
     class Meta:
         model = Sensor
         fields = ['company', 'labels']
-

@@ -13,9 +13,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         fake = Faker()
-        print("Before Inserting data in company {} ".format(Company.objects.all().count()))
-        print("Before Inserting data in Sensor {} ".format(Sensor.objects.all().count()))
-        print("Before Inserting data in Measurement {} ".format(Measurement.objects.all().count()))
+        print("Before Inserting data in company {} ".format(
+            Company.objects.all().count()))
+        print("Before Inserting data in Sensor {} ".format(
+            Sensor.objects.all().count()))
+        print("Before Inserting data in Measurement {} ".format(
+            Measurement.objects.all().count()))
 
         n = 10
 
@@ -45,8 +48,9 @@ class Command(BaseCommand):
                                                             date=date,
                                                             value=value)[0]
 
-        print("Records Inserted in company {} ".format(Company.objects.all().count()))
-        print("Records Inserted in Sensor {} ".format(Sensor.objects.all().count()))
-        print("Records Inserted in Measurement {} ".format(Measurement.objects.all().count()))
-
-
+        print("Records Inserted in company {} ".format(
+            Company.objects.all().count()))
+        print("Records Inserted in Sensor {} ".format(
+            Sensor.objects.all().count()))
+        print("Records Inserted in Measurement {} ".format(
+            Measurement.objects.all().count()))

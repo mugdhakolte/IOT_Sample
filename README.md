@@ -37,12 +37,14 @@ The sample application consists of three models-the Company, Sensor, and Measure
 
 # Admin Interface
 
-    > python manage.py createsuperuser
+   > python manage.py createsuperuser
  
     http://127.0.0.1:8000/admin/
 
 # To Configure Project Using Docker
 
    > sudo docker-compose up --build
+
    > sudo docker-compose exec web_rest python manage.py migrate
+
    > sudo docker-compose exec web_rest python manage.py generatedata 

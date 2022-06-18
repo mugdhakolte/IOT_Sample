@@ -5,7 +5,6 @@ from rest_framework import routers
 
 from sample.viewsets import *
 
-
 router = routers.DefaultRouter()
 router.register(r'companies', CompanyViewset, basename='companies')
 router.register(r'sensors', SensorViewset, basename='sensors')

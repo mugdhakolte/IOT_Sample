@@ -26,9 +26,13 @@ class SensorSerializer(serializers.ModelSerializer):
 class ValueSerializer(serializers.Serializer):
     """Value JSONField serializer class for Measurement."""
 
-    temperature = serializers.FloatField(required=True, min_value=20, max_value=38)
+    temperature = serializers.FloatField(required=True,
+                                         min_value=20,
+                                         max_value=38)
     rssi = serializers.IntegerField(required=True, min_value=0, max_value=46)
-    humidity = serializers.FloatField(required=True, min_value=0, max_value=100)
+    humidity = serializers.FloatField(required=True,
+                                      min_value=0,
+                                      max_value=100)
 
 
 class MeasurementSerializer(serializers.ModelSerializer):
