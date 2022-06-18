@@ -57,6 +57,7 @@ class Measurement(models.Model):
     class Meta:
         """Meta class for Measurement."""
         db_table = 'Measurement'
+        ordering = ['id']
 
     def __str__(self):
         """

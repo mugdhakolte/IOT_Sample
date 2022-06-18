@@ -1,3 +1,5 @@
+from rest_framework import viewsets, mixins
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from sample.models import *
@@ -57,32 +59,24 @@ class SensorViewset(ModelViewSet):
     filterset_class = SensorFilter
 
 
-class MeasurementViewset(ModelViewSet):
+class MeasurementViewset(mixins.CreateModelMixin, mixins.ListModelMixin,
+                         viewsets.GenericViewSet):
     """
         list:
             Lists Measurements.
 
         create:
             Creates new Measurement.
-
-        retrieve:
-            retrieves Measurements by its ID.
-
-        update:
-            updates Measurements by its ID.
-
-        partial_update:
-            updates Measurements by its ID.
-
-        destroy:
-            deletes Measurements by its ID.
-
     """
+
+    queryset = Measurement.objects.all()
     serializer_class = MeasurementSerializer
     pagination_class = StandardResultsSetPagination
 
-    def get_queryset(self):
-        queryset = Measurement.objects.all()
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        paginator = self.pagination_class()
+
         sensor = self.request.query_params.get('sensor')
         company = self.request.query_params.get('company')
         start = self.request.query_params.get('start')
@@ -95,4 +89,6 @@ class MeasurementViewset(ModelViewSet):
         elif start and end:
             queryset = queryset.filter(date__range=(start, end))
 
-        return queryset
+        objects = paginator.paginate_queryset(queryset, request)
+        serializer = self.get_serializer(objects, many=True)
+        return paginator.get_paginated_response(serializer.data)
