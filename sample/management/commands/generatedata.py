@@ -1,62 +1,52 @@
 import pytz
 import random
 
-from django.core.management.base import BaseCommand
-
-import faker.providers
 from faker import Faker
 
+from django.core.management.base import BaseCommand
+
 from sample.models import *
-
-fake = Faker()
-sensor_ids = set([fake.bothify(text='????-#####') for _ in range(50)])
-
-
-class Provider(faker.providers.BaseProvider):
-
-    def get_sensor_id(self):
-        return self.random_element(sensor_ids)
 
 
 class Command(BaseCommand):
     help = "Command to dump data in database."
 
     def handle(self, *args, **options):
-        fake.add_provider(Provider)
+        fake = Faker()
+        print("Before Inserting data in company {} ".format(Company.objects.all().count()))
+        print("Before Inserting data in Sensor {} ".format(Sensor.objects.all().count()))
+        print("Before Inserting data in Measurement {} ".format(Measurement.objects.all().count()))
 
-        for _ in range(50):
+        n = 10
+
+        for _ in range(n):
             name = fake.company()
             location = fake.city()
-            Company.objects.create(name=name, location=location)
+            company = Company.objects.get_or_create(name=name,
+                                                    location=location)[0]
 
-        for _ in range(50):
-            sensor_id = fake.unique.get_sensor_id()
+            sensor_id = fake.unique.bothify(text='????-#####')
             active = fake.pybool()
             labels = fake.pylist(nb_elements=6, value_types='str')
-            companies = list(Company.objects.values_list('id', flat=True))
 
-            for company in companies:
-                try:
-                    company = Company.object.get(id=company)
-                    Sensor.objects.create(sensor_id=sensor_id, company_id=company, is_active=active, labels=labels)
-                except ModuleNotFoundError:
-                    print("This company with {} id is not present in DB".format(company))
+            sensor = Sensor.objects.get_or_create(sensor_id=sensor_id,
+                                                  company=company,
+                                                  is_active=active,
+                                                  labels=labels)[0]
 
-        for _ in range(50):
             date = fake.date_time(tzinfo=pytz.UTC)
             value = {
                 'temperature': round(random.uniform(20, 38), 2),
                 'rssi': random.randint(0, 46),
                 'humidity': round(random.uniform(0, 101), 2)
             }
-            sensors = list(Sensor.objects.values_list('sensor_id', flat=True))
 
-            for sensor in sensors:
-                try:
-                    sensor = Sensor.objects.get(sensor_id=sensor)
-                    Measurement.objects.create(sensor=sensor, date=date, value=value)
-                except ModuleNotFoundError:
-                    print("This Sensor with {} id is not present in DB".format(sensor))
+            measurement = Measurement.objects.get_or_create(sensor=sensor,
+                                                            date=date,
+                                                            value=value)[0]
 
+        print("Records Inserted in company {} ".format(Company.objects.all().count()))
+        print("Records Inserted in Sensor {} ".format(Sensor.objects.all().count()))
+        print("Records Inserted in Measurement {} ".format(Measurement.objects.all().count()))
 
 

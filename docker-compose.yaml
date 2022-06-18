@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  db_sample:
+    image: postgres:14-alpine
+    volumes:
+      - sampledata:/var/lib/postgresql/data
+    env_file: .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+  web_sample:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    env_file: .env
+    environment:
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db_sample
+
+volumes:
+  sampledata:

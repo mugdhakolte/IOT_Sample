@@ -6,6 +6,7 @@ The sample application consists of three models-the Company, Sensor, and Measure
 1) Python 3
 2) Django 4
 3) Postgresql 14
+4) Ubuntu 20.04
 
 # Steps to configure Project
 
@@ -14,15 +15,19 @@ The sample application consists of three models-the Company, Sensor, and Measure
 
     > source venv/bin/activate
 
-2) install requirements.txt in virtualenv
+2) Install requirements.txt in virtualenv
     > pip install -r docs/requirements.txt
 
-3) Migrations to database
+4) Migrations to database
     > python manage.py makemigrations sample
 
     > python manage.py migrate
 
-4) Run the Project
+5) To Populate sample data in Database (Run Custom Management Command)
+
+   > python manage.py generatedata
+
+6) Run the Project
     > python manage.py runserver
 
 
@@ -33,6 +38,11 @@ The sample application consists of three models-the Company, Sensor, and Measure
 # Admin Interface
 
     > python manage.py createsuperuser
-
+ 
     http://127.0.0.1:8000/admin/
-    
+
+# To Configure Project Using Docker
+
+   > sudo docker-compose up --build
+   > sudo docker-compose exec web_rest python manage.py migrate
+   > sudo docker-compose exec web_rest python manage.py generatedata 
