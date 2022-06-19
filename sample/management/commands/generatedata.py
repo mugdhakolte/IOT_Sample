@@ -27,21 +27,18 @@ class Command(BaseCommand):
         fake = Faker()
 
         company_count, sensor_count, measurement_count = self.get_count()
-        logger.info("Before Inserting data in company {} ".format(
-            company_count))
-        logger.info("Before Inserting data in Sensor {} ".format(
-            sensor_count))
+        logger.info(
+            "Before Inserting data in company {} ".format(company_count))
+        logger.info("Before Inserting data in Sensor {} ".format(sensor_count))
         logger.info("Before Inserting data in Measurement {} ".format(
             measurement_count))
 
-        print("Before Inserting data in company {} ".format(
-            company_count))
-        print("Before Inserting data in Sensor {} ".format(
-            sensor_count))
+        print("Before Inserting data in company {} ".format(company_count))
+        print("Before Inserting data in Sensor {} ".format(sensor_count))
         print("Before Inserting data in Measurement {} ".format(
             measurement_count))
 
-        n = 10
+        n = 100
 
         for _ in range(n):
             name = fake.company()
@@ -69,18 +66,16 @@ class Command(BaseCommand):
                                                             date=date,
                                                             value=value)[0]
 
-        company_count_new, sensor_count_new, measurement_count_new = self.get_count()
+        company_count_new, sensor_count_new, measurement_count_new = self.get_count(
+        )
 
-        logger.info("Records Inserted in Company {} ".format(
-            company_count_new))
-        logger.info("Records Inserted in Sensor {} ".format(
-            sensor_count_new))
+        logger.info(
+            "Records Inserted in Company {} ".format(company_count_new))
+        logger.info("Records Inserted in Sensor {} ".format(sensor_count_new))
         logger.info("Records Inserted in Measurement {} ".format(
             measurement_count_new))
 
-        print("Records Inserted in Company {} ".format(
-            company_count_new))
-        print("Records Inserted in Sensor {} ".format(
-            sensor_count_new))
+        print("Records Inserted in Company {} ".format(company_count_new))
+        print("Records Inserted in Sensor {} ".format(sensor_count_new))
         print("Records Inserted in Measurement {} ".format(
             measurement_count_new))

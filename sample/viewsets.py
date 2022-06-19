@@ -1,5 +1,6 @@
+from django.db.models import Q
+
 from rest_framework import viewsets, mixins
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from sample.models import *
@@ -84,9 +85,9 @@ class MeasurementViewset(mixins.CreateModelMixin, mixins.ListModelMixin,
 
         if sensor:
             queryset = queryset.filter(sensor=sensor)
-        elif company:
+        if company:
             queryset = queryset.filter(sensor__company=company)
-        elif start and end:
+        if start and end:
             queryset = queryset.filter(date__range=(start, end))
 
         objects = paginator.paginate_queryset(queryset, request)
