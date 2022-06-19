@@ -1,5 +1,6 @@
 import pytz
 import random
+import logging
 
 from faker import Faker
 
@@ -7,18 +8,38 @@ from django.core.management.base import BaseCommand
 
 from sample.models import *
 
+logger = logging.getLogger('django')
+
 
 class Command(BaseCommand):
     help = "Command to dump data in database."
 
+    def get_count(self):
+        """
+            function to return count of Models.
+        """
+        company_count = Company.objects.all().count()
+        sensor_count = Sensor.objects.all().count()
+        measurement_count = Measurement.objects.all().count()
+        return company_count, sensor_count, measurement_count
+
     def handle(self, *args, **options):
         fake = Faker()
+
+        company_count, sensor_count, measurement_count = self.get_count()
+        logger.info("Before Inserting data in company {} ".format(
+            company_count))
+        logger.info("Before Inserting data in Sensor {} ".format(
+            sensor_count))
+        logger.info("Before Inserting data in Measurement {} ".format(
+            measurement_count))
+
         print("Before Inserting data in company {} ".format(
-            Company.objects.all().count()))
+            company_count))
         print("Before Inserting data in Sensor {} ".format(
-            Sensor.objects.all().count()))
+            sensor_count))
         print("Before Inserting data in Measurement {} ".format(
-            Measurement.objects.all().count()))
+            measurement_count))
 
         n = 10
 
@@ -48,9 +69,18 @@ class Command(BaseCommand):
                                                             date=date,
                                                             value=value)[0]
 
-        print("Records Inserted in company {} ".format(
-            Company.objects.all().count()))
+        company_count_new, sensor_count_new, measurement_count_new = self.get_count()
+
+        logger.info("Records Inserted in Company {} ".format(
+            company_count_new))
+        logger.info("Records Inserted in Sensor {} ".format(
+            sensor_count_new))
+        logger.info("Records Inserted in Measurement {} ".format(
+            measurement_count_new))
+
+        print("Records Inserted in Company {} ".format(
+            company_count_new))
         print("Records Inserted in Sensor {} ".format(
-            Sensor.objects.all().count()))
+            sensor_count_new))
         print("Records Inserted in Measurement {} ".format(
-            Measurement.objects.all().count()))
+            measurement_count_new))
