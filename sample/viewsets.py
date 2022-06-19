@@ -1,5 +1,3 @@
-from django.db.models import Q
-
 from rest_framework import viewsets, mixins
 from rest_framework.viewsets import ModelViewSet
 
