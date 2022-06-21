@@ -1,4 +1,5 @@
 import pytz
+import json
 import random
 
 from faker import Faker
@@ -44,6 +45,11 @@ class CompanyTestcase(APITestCase):
                                                             'rssi': random.randint(0, 46),
                                                             'humidity': round(random.uniform(0, 101), 2)
                                                         })
+
+        self.company_payload = {
+            'name': "test",
+            'location': "test"
+        }
 
     def test_companies(self):
         url = reverse("companies-list")
@@ -94,4 +100,45 @@ class CompanyTestcase(APITestCase):
         serializer = MeasurementSerializer(measurements, many=True)
         self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_company(self):
+        url = reverse("companies-list")
+        response = self.client.post(url, data=self.company_payload)
+        self.assertEqual(Company.objects.get(name='test').name, 'test')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_sensor(self):
+        url = reverse("sensors-list")
+        company = Company.objects.create(name='test_company', location='test_location')
+        sensor_payload = {
+            'sensor_id': "testsensor",
+            'company': company.id,
+            'is_active': True,
+            'labels': ['test_label1', 'test_label2', 'test_label3']
+        }
+
+        response = self.client.post(url, data=sensor_payload)
+        self.assertEqual(Sensor.objects.get(sensor_id='testsensor').sensor_id, 'testsensor')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_measurement(self):
+        url = reverse("measurements-list")
+        company = Company.objects.create(name='test_company', location='test_location')
+        sensor = Sensor.objects.create(sensor_id="testsensor", company=company,
+                                       is_active=True, labels=['test_label1', 'test_label2', 'test_label3'])
+
+        measurement_payload = {
+            'sensor': sensor.sensor_id,
+            'date': "2022-06-21T22:23:30.756Z",
+            'value':
+                {
+                    'temperature': 21.1,
+                    'rssi': 3,
+                    'humidity': 4.5
+                }
+        }
+        response = self.client.post(url, data=measurement_payload)
+        self.assertEqual(Measurement.objects.get(sensor=sensor).sensor.sensor_id, 'testsensor')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
