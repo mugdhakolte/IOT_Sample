@@ -41,6 +41,8 @@ Following is the API list which sample application provides:
 6) Run the Project
     > python manage.py runserver
 
+7) Run the Testcases
+    > python manage.py test
 
 ## API Documentation
 

@@ -67,11 +67,6 @@ class CompanyTestcase(APITestCase):
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_invalid_single_company(self):
-        url = reverse("companies-detail", kwargs={'pk': 10})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
     def test_sensors(self):
         url = reverse("sensors-list")
         response = self.client.get(url)
@@ -141,4 +136,57 @@ class CompanyTestcase(APITestCase):
         self.assertEqual(Measurement.objects.get(sensor=sensor).sensor.sensor_id, 'testsensor')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_update_company(self):
+        url = reverse("companies-detail", kwargs={"pk": self.company.pk})
+        data = {"name": "test_name", "location": "test_location"}
+        response = self.client.put(url, data=data)
+        response_data = json.loads(response.content)
+        company = Company.objects.get(id=self.company.id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_data.get("name"), company.name)
+
+    def test_update_sensor(self):
+        url = reverse("sensors-detail", kwargs={"pk": self.sensor_1.sensor_id})
+        data = {
+            'sensor_id': self.sensor_1.sensor_id,
+            'company': self.company.id,
+            'is_active': True,
+            'labels': ['test_label4', 'test_label5', 'test_label5']
+        }
+        response = self.client.put(url, data=data)
+        response_data = json.loads(response.content)
+        sensor = Sensor.objects.get(sensor_id=self.sensor_1.sensor_id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_data.get("labels"), sensor.labels)
+
+    def test_partial_update_company(self):
+        url = reverse("companies-detail", kwargs={"pk": self.company.pk})
+        data = {"location": "test_location"}
+        response = self.client.patch(url, data=data)
+        response_data = json.loads(response.content)
+        company = Company.objects.get(id=self.company.id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_data.get("name"), company.name)
+
+    def test_partial_update_sensor(self):
+        url = reverse("sensors-detail", kwargs={"pk": self.sensor_1.sensor_id})
+        data = {
+            'is_active': False,
+            'labels': ['test_label4', 'test_label5', 'test_label5']
+        }
+        response = self.client.patch(url, data=data)
+        response_data = json.loads(response.content)
+        sensor = Sensor.objects.get(sensor_id=self.sensor_1.sensor_id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_data.get("labels"), sensor.labels)
+
+    def test_delete_company(self):
+        url = reverse("companies-detail", kwargs={"pk": self.company.pk})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_sensor(self):
+        url = reverse("sensors-detail", kwargs={"pk": self.sensor_1.sensor_id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
